@@ -1,0 +1,14 @@
+import React, { useEffect, useState } from 'react';
+
+const SingleObject = (url) => {
+    const [data, setData] = useState({});
+    useEffect(() => {
+        fetch(url)
+            .then(res => res.json())
+            .then(d => setData(d))
+    }, []);
+
+    return data;
+};
+
+export default SingleObject;
