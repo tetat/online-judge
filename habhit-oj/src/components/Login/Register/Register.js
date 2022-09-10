@@ -48,7 +48,9 @@ const Register = () => {
         const user = {
             name,
             email,
-            Solved: []
+            address: "",
+            institute: "",
+            Solved: [[""]]
         };
 
         fetch(`http://localhost:5000/users`, {

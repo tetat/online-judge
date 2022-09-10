@@ -1,36 +1,76 @@
 import React, { useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import auth from '../../../firebase.init';
 import Axios from 'axios';
 import { useParams } from 'react-router-dom';
 import SingleObject from '../../hooks/SingleObject/SingleObject';
+import Loading from '../../Shared/Loading/Loading';
+import Login from '../../Login/Login/Login';
+
 
 const Problem = () => {
+    const [user] = useAuthState(auth);
+    console.log(user);
     const problemId = useParams().probId;
     const url = `http://localhost:5000/problems/${problemId}`;
     const problem = SingleObject(url);
+    // const Inputs = problem.sample.input;
+    const Output = problem.hidden?.output;
 
     const [code, setCode] = useState(``);
     const [lang, setLang] = useState('cpp');
     const [output, setOutput] = useState('');
+    const [Color, setColor] = useState('');
     const [loading, setLoading] = useState(false);
+    const [accepted, setAccepted] = useState(false);
 
-    // console.log(code, lang);
+    const inputs = problem.sample?.input.split('\n');
+    const outputs = problem.sample?.output.split('\n');
+    console.log(inputs, outputs);
 
     const handleSubmit = (event) => {
         event.preventDefault();
         setLoading(true);
+
+        if (!user) {
+            return <Login></Login>
+        }
 
         console.log(code, lang);
         if (code === ``) {
             return
         }
 
-        // Post request to compile endpoint
+        if (accepted) {
+            setAccepted(false);
+
+        }
+
         Axios.post(`http://localhost:5000/compile`, {
             code: code,
             language: lang,
-            input: problem.sample?.input[0]
+            input: problem.hidden?.input
         }).then((res) => {
-            setOutput(res.data.output);
+            if (res.data.success === true) {
+                // console.log(res.data.output + " A " + Output);
+                // console.log(res.data.output.length + " Abc " + Output.length);
+                if (res.data.output.slice(0, -1) === Output) {
+                    // console.log(res.data.output + " Abc " + Output[i]);
+                    setOutput("Accepted");
+                    setColor('text-success');
+                    setAccepted(true);
+                }
+                else {
+                    setOutput("Wrong Answer!");
+                    setColor('text-danger');
+                    // setNext(false);
+                }
+            }
+            else {
+                setOutput(res.data.error);
+                setColor('text-danger');
+                // setNext(false);
+            }
         }).then(() => {
             setLoading(false);
         })
@@ -49,15 +89,26 @@ const Problem = () => {
                 <div className='d-flex justify-content-around'>
                     <p style={{ textAlign: "left" }}>
                         <p style={{ fontWeight: "bold" }}>Input:</p>
-                        <p>{problem.sample?.input[0]}</p>
+                        {
+                            inputs?.map((inp) =>
+                                <p className='mb-0'>{inp}</p>
+                            )
+                        }
                     </p>
                     <p style={{ textAlign: "left" }}>
                         <p style={{ fontWeight: "bold" }}>Output:</p>
-                        <p>{problem.sample?.output[0]}</p>
+                        {
+                            outputs?.map((out) =>
+                                <p className='mb-0'>{out}</p>
+                            )
+                        }
                     </p>
                 </div>
             </div>
-            <div className='d-flex' style={{ width: "80%", margin: "0 auto", backgroundColor: "#6495ED" }}>
+
+            {/* edito */}
+            <div className='d-flex'
+                style={{ width: "80%", margin: "0 auto", backgroundColor: "#F0F8FF", border: "1px solid black" }}>
                 <div>
                     <textarea className='mt-3 ms-3' rows='20' cols='65'
                         value={code} onChange={(e) => setCode(e.target.value)}></textarea>
@@ -75,8 +126,11 @@ const Problem = () => {
                         <button className='border-0 rounded text-white bg-primary' onClick={handleSubmit}>Submit</button>
                     </div>
                 </div>
-                <div>
-                    {output && <p>{output}</p>}
+                <div className='p-4'>
+                    {
+                        loading ? <Loading></Loading> :
+                            <p className={Color}>{output}</p>
+                    }
                 </div>
             </div>
         </div>

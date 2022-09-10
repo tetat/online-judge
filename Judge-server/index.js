@@ -59,6 +59,29 @@ async function run() {
             res.send(question);
         });
 
+        // update data
+        app.put('/users/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const user = await users.findOne(query);
+            const updateUser = req.body;
+            const options = { upsert: true };
+
+            // console.log(updateFruits);
+
+            const updateDoc = {
+                $set: {
+                    quantity: updateFruits.quantity ? updateFruits.quantity : fruit.quantity,
+                    shortDescription: updateFruits.shortDescription ? updateFruits.shortDescription : fruit.shortDescription,
+                    img: updateFruits.img ? updateFruits.img : fruit.img,
+                    sold: updateFruits.sold ? updateFruits.sold : fruit.sold
+                }
+            }
+
+            const result = await fruitCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
+        });
+
         // code run from codex API
         app.post("/compile", (req, res) => {
             //getting the required data from the request
@@ -88,8 +111,8 @@ async function run() {
             Axios(config)
                 .then((response) => {
                     res.send(response.data)
-                    console.log(response.data)
-                    console.log(req.body);
+                    // console.log(response.data)
+                    // console.log(req.body);
                 }).catch((error) => {
                     console.log(error);
                 });

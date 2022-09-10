@@ -24,16 +24,16 @@ function App() {
         <Route path='/' element={<Home></Home>}></Route>
         <Route path='/home' element={<Home></Home>}></Route>
         <Route path='/problems' element={<Problems></Problems>}></Route>
-        <Route path='/problems/:probId' element={<Problem></Problem>}></Route>
+        <Route path='/problems/:probId' element={
+          <RequireAuth>
+            <Problem></Problem>
+          </RequireAuth>
+        }></Route>
         <Route path='/about' element={<About></About>}></Route>
         <Route path='/login' element={<Login></Login>}></Route>
         <Route path="/forgetpassword" element={<ForgetPassword></ForgetPassword>}></Route>
         <Route path='/register' element={<Register></Register>}></Route>
-        <Route path='/users' element={
-          <RequireAuth>
-            <Users></Users>
-          </RequireAuth>
-        }></Route>
+        <Route path='/users' element={<Users></Users>}></Route>
         <Route path='/user/:userId' element={
           <RequireAuth>
             <User></User>
@@ -43,7 +43,7 @@ function App() {
       </Routes>
 
       <Footer></Footer>
-    </div>
+    </div >
   );
 }
 
