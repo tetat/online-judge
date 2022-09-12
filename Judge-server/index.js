@@ -21,6 +21,13 @@ async function run() {
         const problems = client.db('problems').collection('prob');
         const users = client.db('users').collection('usersRecord');
 
+        // create or insert data
+        app.post('/problems', async (req, res) => {
+            const newProblem = req.body;
+            const result = await problems.insertOne(newProblem);
+            res.send(result);
+        });
+
         app.post('/users', async (req, res) => {
             const newUser = req.body;
             const result = await users.insertOne(newUser);
@@ -62,23 +69,22 @@ async function run() {
         // update data
         app.put('/users/:id', async (req, res) => {
             const id = req.params.id;
+            // console.log(id);
             const filter = { _id: ObjectId(id) };
-            const user = await users.findOne(query);
+            // const curUser = await users.findOne(filter);
             const updateUser = req.body;
             const options = { upsert: true };
 
-            // console.log(updateFruits);
+            console.log(updateUser);
 
             const updateDoc = {
                 $set: {
-                    quantity: updateFruits.quantity ? updateFruits.quantity : fruit.quantity,
-                    shortDescription: updateFruits.shortDescription ? updateFruits.shortDescription : fruit.shortDescription,
-                    img: updateFruits.img ? updateFruits.img : fruit.img,
-                    sold: updateFruits.sold ? updateFruits.sold : fruit.sold
+                    // SolvedBy: updateProblem?.SolvedBy ? updateProblem?.SolvedBy : problem?.SolvedBy
+                    Solved: updateUser.Solved
                 }
             }
 
-            const result = await fruitCollection.updateOne(filter, updateDoc, options);
+            const result = await users.updateOne(filter, updateDoc, options);
             res.send(result);
         });
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import auth from '../../../firebase.init';
 import Axios from 'axios';
@@ -6,16 +6,20 @@ import { useParams } from 'react-router-dom';
 import SingleObject from '../../hooks/SingleObject/SingleObject';
 import Loading from '../../Shared/Loading/Loading';
 import Login from '../../Login/Login/Login';
+import useFetch from '../../hooks/useFetch/useFetch';
 
 
 const Problem = () => {
     const [user] = useAuthState(auth);
-    console.log(user);
+    // console.log(user);
     const problemId = useParams().probId;
     const url = `http://localhost:5000/problems/${problemId}`;
     const problem = SingleObject(url);
     // const Inputs = problem.sample.input;
     const Output = problem.hidden?.output;
+
+    // get users
+    const users = useFetch('http://localhost:5000/users');
 
     const [code, setCode] = useState(``);
     const [lang, setLang] = useState('cpp');
@@ -26,7 +30,7 @@ const Problem = () => {
 
     const inputs = problem.sample?.input.split('\n');
     const outputs = problem.sample?.output.split('\n');
-    console.log(inputs, outputs);
+    // console.log(inputs, outputs);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -41,11 +45,6 @@ const Problem = () => {
             return
         }
 
-        if (accepted) {
-            setAccepted(false);
-
-        }
-
         Axios.post(`http://localhost:5000/compile`, {
             code: code,
             language: lang,
@@ -58,7 +57,7 @@ const Problem = () => {
                     // console.log(res.data.output + " Abc " + Output[i]);
                     setOutput("Accepted");
                     setColor('text-success');
-                    setAccepted(true);
+                    saveTo();
                 }
                 else {
                     setOutput("Wrong Answer!");
@@ -74,6 +73,33 @@ const Problem = () => {
         }).then(() => {
             setLoading(false);
         })
+
+        const saveTo = () => {
+            console.log(users);
+            const User = users?.find(u => u.email === user.email);
+            if (User) {
+                const newId = User.Solved?.find(d => d[0] === problemId);
+                console.log(newId);
+                if (!newId) {
+                    User.Solved.push([problemId, problem.problemName]);
+                    console.log(User);
+
+                    fetch(`http://localhost:5000/users/${User._id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'content-type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            Solved: User.Solved
+                        })
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            console.log(data);
+                        })
+                }
+            }
+        }
     }
 
     return (

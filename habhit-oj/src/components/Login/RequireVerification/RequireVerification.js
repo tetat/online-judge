@@ -4,7 +4,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import auth from '../../../firebase.init';
 import Loading from '../../Shared/Loading/Loading';
 
-const RequireAuth = ({ children }) => {
+const RequireVerification = ({ children }) => {
     const [user, loading, error] = useAuthState(auth);
     const location = useLocation();
 
@@ -13,15 +13,11 @@ const RequireAuth = ({ children }) => {
     }
 
 
-    if (!user) {
-        return <Navigate to="/login" state={{ from: location }} replace />;
-    }
-
-    if (children.type.name === 'Admin' && user.email !== 'nishat00101@gmail.com') {
-        return <Navigate to="/" state={{ from: location }} replace />;
+    if (!user.emailVerified) {
+        return <Navigate to="/verify" state={{ from: location }} replace />;
     }
 
     return children;
 };
 
-export default RequireAuth;
+export default RequireVerification;

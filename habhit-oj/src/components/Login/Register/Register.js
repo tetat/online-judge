@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import auth from '../../../firebase.init';
 
 const Register = () => {
@@ -36,11 +36,13 @@ const Register = () => {
         if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d#$@!%&*?]{8,30}$/.test(password) === false) {
             setPass(true);
         }
+        else if (password !== confirmPassword) {
+            setPassMatch(false);
+        }
         else {
             createUserWithEmailAndPassword(email, password);
             setPassMatch(true);
             setPass(false);
-
             setTerms(!terms);
             event.target.reset();
         }

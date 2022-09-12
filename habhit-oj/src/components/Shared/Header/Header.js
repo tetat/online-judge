@@ -35,7 +35,7 @@ const Header = () => {
                         {
                             user ?
                                 <>
-                                    <Nav.Link href="/user/:id">User</Nav.Link>
+                                    {user.email === 'nishat00101@gmail.com' && <Nav.Link href="/admin">Admin</Nav.Link>}
                                     <input onClick={handleLogOut} className='btn border-0' type="button" value="Log Out" />
                                 </>
                                 :

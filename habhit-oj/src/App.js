@@ -14,6 +14,9 @@ import RequireAuth from './components/Login/RequireAuth/RequireAuth';
 import User from './components/User/User';
 import Users from './components/Users/Users';
 import Problem from './components/Problems/Problem/Problem';
+import Admin from './components/Admin/Admin';
+import VerifyEmail from './components/Shared/VerifyEmail/VerifyEmail';
+import RequireVerification from './components/Login/RequireVerification/RequireVerification';
 
 function App() {
   return (
@@ -26,7 +29,9 @@ function App() {
         <Route path='/problems' element={<Problems></Problems>}></Route>
         <Route path='/problems/:probId' element={
           <RequireAuth>
-            <Problem></Problem>
+            <RequireVerification>
+              <Problem></Problem>
+            </RequireVerification>
           </RequireAuth>
         }></Route>
         <Route path='/about' element={<About></About>}></Route>
@@ -36,7 +41,21 @@ function App() {
         <Route path='/users' element={<Users></Users>}></Route>
         <Route path='/user/:userId' element={
           <RequireAuth>
-            <User></User>
+            <RequireVerification>
+              <User></User>
+            </RequireVerification>
+          </RequireAuth>
+        }></Route>
+        <Route path='/admin' element={
+          <RequireAuth>
+            <RequireVerification>
+              <Admin></Admin>
+            </RequireVerification>
+          </RequireAuth>
+        }></Route>
+        <Route path='/verify' element={
+          <RequireAuth>
+            <VerifyEmail></VerifyEmail>
           </RequireAuth>
         }></Route>
         <Route path='*' element={<NotFound></NotFound>}></Route>
