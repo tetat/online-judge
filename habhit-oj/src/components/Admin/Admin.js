@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PageTitle from '../hooks/PageTitle/PageTitle';
 
 const Admin = () => {
 
@@ -53,6 +54,7 @@ const Admin = () => {
 
     return (
         <div className='my-5'>
+            <PageTitle title="Admin"></PageTitle>
             {
                 added && <p className='text-success'>Problem has been added successfully!</p>
             }

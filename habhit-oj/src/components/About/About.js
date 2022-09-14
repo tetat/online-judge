@@ -1,9 +1,11 @@
 import React from 'react';
+import PageTitle from '../hooks/PageTitle/PageTitle';
 import './About.css';
 
 const About = () => {
     return (
         <div style={{ width: "80%", margin: "0 auto", padding: "20px 20px 200px 20px", backgroundColor: "#F0F8FF" }}>
+            <PageTitle title="About"></PageTitle>
             <h4>About Us</h4>
             <p style={{ textAlign: "left" }}>This Online Judge is created by Team_Penguins. Firstly we created this online judge on our academic project purpose. Our second target is to run this project for learning and practicing programming. Students from our Department can practice programming problem from here for sharp their brain! Our target is to keep update this project so, that it will more user friendly and programmer from our Department easily can learn and practice.</p>
 

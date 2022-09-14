@@ -20,9 +20,9 @@ const Header = () => {
     }
 
     return (
-        <Navbar className='sticky-top' collapseOnSelect expand="lg" bg="info" variant="dark">
+        <Navbar className='sticky-top' collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Container>
-                <Navbar.Brand href="/">HABHIT OJ</Navbar.Brand>
+                <Navbar.Brand className='fst-italic' href="/">HABHIT OJ</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
@@ -36,7 +36,7 @@ const Header = () => {
                             user ?
                                 <>
                                     {user.email === 'nishat00101@gmail.com' && <Nav.Link href="/admin">Admin</Nav.Link>}
-                                    <input onClick={handleLogOut} className='btn border-0' type="button" value="Log Out" />
+                                    <input onClick={handleLogOut} className='btn border-0 text-light' type="button" value="Log Out" />
                                 </>
                                 :
                                 <>

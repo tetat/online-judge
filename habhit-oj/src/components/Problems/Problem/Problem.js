@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import auth from '../../../firebase.init';
 import Axios from 'axios';
@@ -7,6 +7,7 @@ import SingleObject from '../../hooks/SingleObject/SingleObject';
 import Loading from '../../Shared/Loading/Loading';
 import Login from '../../Login/Login/Login';
 import useFetch from '../../hooks/useFetch/useFetch';
+import PageTitle from '../../hooks/PageTitle/PageTitle';
 
 
 const Problem = () => {
@@ -25,8 +26,9 @@ const Problem = () => {
     const [lang, setLang] = useState('cpp');
     const [output, setOutput] = useState('');
     const [Color, setColor] = useState('');
+    const [size, setSize] = useState('fs-6');
     const [loading, setLoading] = useState(false);
-    const [accepted, setAccepted] = useState(false);
+    // const [accepted, setAccepted] = useState(false);
 
     const inputs = problem.sample?.input.split('\n');
     const outputs = problem.sample?.output.split('\n');
@@ -40,11 +42,7 @@ const Problem = () => {
             return <Login></Login>
         }
 
-        console.log(code, lang);
-        if (code === ``) {
-            return
-        }
-
+        // document.getElementById('submitbtn').disabled = false;
         Axios.post(`http://localhost:5000/compile`, {
             code: code,
             language: lang,
@@ -57,32 +55,36 @@ const Problem = () => {
                     // console.log(res.data.output + " Abc " + Output[i]);
                     setOutput("Accepted");
                     setColor('text-success');
+                    setSize('fs-5')
                     saveTo();
                 }
                 else {
                     setOutput("Wrong Answer!");
+                    setSize('fs-5')
                     setColor('text-danger');
-                    // setNext(false);
                 }
             }
             else {
-                setOutput(res.data.error);
+                setOutput('Write valid code for this problem!!!');
+                // console.log("ok:" + res.data.error)
+                if (res.data.error !== undefined) {
+                    setOutput(res.data.error);
+                }
                 setColor('text-danger');
-                // setNext(false);
             }
         }).then(() => {
             setLoading(false);
         })
 
         const saveTo = () => {
-            console.log(users);
+            // console.log(users);
             const User = users?.find(u => u.email === user.email);
             if (User) {
                 const newId = User.Solved?.find(d => d[0] === problemId);
-                console.log(newId);
+                // console.log(newId);
                 if (!newId) {
                     User.Solved.push([problemId, problem.problemName]);
-                    console.log(User);
+                    // console.log(User);
 
                     fetch(`http://localhost:5000/users/${User._id}`, {
                         method: 'PUT',
@@ -104,7 +106,8 @@ const Problem = () => {
 
     return (
         <div>
-            <div style={{ width: "80%", margin: "0 auto", padding: "30px 50px", backgroundColor: "#F0F8FF" }}>
+            <PageTitle title={`${problem.problemName}`}></PageTitle>
+            <div style={{ width: "80%", margin: "0 auto", padding: "30px 50px", backgroundColor: "#f2f2f2" }}>
                 <h2>{problem.problemName}</h2>
                 <p style={{ marginBottom: "0" }}><small>Time: {problem.time}</small></p>
                 <p style={{ margin: "0" }}><small>Memory: {problem.memory}</small></p>
@@ -112,6 +115,7 @@ const Problem = () => {
                 <p style={{ textAlign: "left" }}><span style={{ fontWeight: "bold" }}>Input:</span><br />{problem.input}</p>
                 <p style={{ textAlign: "left" }}><span style={{ fontWeight: "bold" }}>Output:</span><br />{problem.output}</p>
                 <p style={{ fontWeight: "bold", fontStyle: "italic" }}>Example</p>
+
                 <div className='d-flex justify-content-around'>
                     <p style={{ textAlign: "left" }}>
                         <p style={{ fontWeight: "bold" }}>Input:</p>
@@ -133,15 +137,16 @@ const Problem = () => {
             </div>
 
             {/* edito */}
-            <div className='d-flex'
-                style={{ width: "80%", margin: "0 auto", backgroundColor: "#F0F8FF", border: "1px solid black" }}>
+            <div
+                style={{ width: "80%", margin: "0 auto", backgroundColor: "#f2f2f2", border: "1px solid black" }}>
                 <div>
-                    <textarea className='mt-3 ms-3' rows='20' cols='65'
+                    <p className='mt-3 mb-0 fw-bold fst-italic'>Editor</p>
+                    <textarea className='w-75' rows="15"
                         value={code} onChange={(e) => setCode(e.target.value)}></textarea>
 
-                    <div className='mb-4'>
-                        <span className='border-0 rounded me-3 p-1 text-white bg-primary'>Select a language &nbsp;
-                            <select className='border-0 rounded me-3'
+                    <div className='my-4'>
+                        <span className='border-0 rounded me-3 p-2 text-white bg-primary'>Select a language &nbsp;
+                            <select className='border-0 px-2 rounded me-3'
                                 value={lang} onChange={(e) => setLang(e.target.value)}>
                                 <option value='cpp'>C++</option>
                                 <option value='c'>C</option>
@@ -149,13 +154,21 @@ const Problem = () => {
                                 <option value='py'>Python</option>
                             </select>
                         </span>
-                        <button className='border-0 rounded text-white bg-primary' onClick={handleSubmit}>Submit</button>
+                        <button
+                            className='border-0 px-3 py-1 rounded text-white bg-primary'
+                            onClick={handleSubmit} >Submit</button>
                     </div>
                 </div>
-                <div className='p-4'>
+                <div className='bg-white m-3 p-5'>
                     {
                         loading ? <Loading></Loading> :
-                            <p className={Color}>{output}</p>
+                            <p style={{ textAlign: "left" }}>
+                                <span className='fs-5 '>Status: </span>
+                                <span className={Color + ' ' + size}>
+                                    {
+                                        output
+                                    }</span>
+                            </p>
                     }
                 </div>
             </div>

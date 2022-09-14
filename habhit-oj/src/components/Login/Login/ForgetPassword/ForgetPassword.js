@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
 import auth from '../../../../firebase.init';
+import PageTitle from '../../../hooks/PageTitle/PageTitle';
 import Loading from '../../../Shared/Loading/Loading';
 
 const ForgetPassword = () => {
@@ -23,16 +24,18 @@ const ForgetPassword = () => {
         await sendPasswordResetEmail(email);
     }
     return (
-        <div style={{ margin: `0 0 ${sent ? '300px' : '190px'} 0` }}>
+        <div
+            style={{ width: "80%", margin: "0 auto", padding: "100px 0", backgroundColor: "#f2f2f2" }}>
+            <PageTitle title="Forget Password"></PageTitle>
             {
                 sent ?
-                    <>
-                        <p style={{ margin: '150px 0 0 0' }} className='fs-1'>Email has been sent</p>
+                    <div style={{ padding: "90px 0" }}>
+                        <p className='fs-1'>Email has been sent</p>
                         <p className='fs-4'>Please check your inbox folder or spam folder.</p>
-                    </>
+                    </div>
                     :
                     <>
-                        <p className='fs-1 mt-5'>To reset your password?</p>
+                        <p className='fs-1'>To reset your password?</p>
                         <p className='fs-3'>Please type your email and click reset email.</p>
                         <form onSubmit={handleSubmit} className='w-50 my-4 mx-auto'>
                             <input

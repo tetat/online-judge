@@ -34,6 +34,8 @@ async function run() {
 
             res.send(result);
         })
+
+        // get data
         app.get('/users', async (req, res) => {
             const query = {};
             const cursor = users.find(query);
@@ -41,7 +43,6 @@ async function run() {
 
             res.send(Users);
         });
-
         app.get('/users/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
@@ -71,16 +72,17 @@ async function run() {
             const id = req.params.id;
             // console.log(id);
             const filter = { _id: ObjectId(id) };
-            // const curUser = await users.findOne(filter);
+            const curUser = await users.findOne(filter);
             const updateUser = req.body;
             const options = { upsert: true };
 
-            console.log(updateUser);
+            // console.log(updateUser);
 
             const updateDoc = {
                 $set: {
-                    // SolvedBy: updateProblem?.SolvedBy ? updateProblem?.SolvedBy : problem?.SolvedBy
-                    Solved: updateUser.Solved
+                    institute: updateUser.institute || curUser.institute,
+                    address: updateUser.address || curUser.address,
+                    Solved: updateUser.Solved || curUser.Solved
                 }
             }
 

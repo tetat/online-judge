@@ -17,6 +17,7 @@ import Problem from './components/Problems/Problem/Problem';
 import Admin from './components/Admin/Admin';
 import VerifyEmail from './components/Shared/VerifyEmail/VerifyEmail';
 import RequireVerification from './components/Login/RequireVerification/RequireVerification';
+import Settings from './components/User/Settings/Settings';
 
 function App() {
   return (
@@ -44,6 +45,11 @@ function App() {
             <RequireVerification>
               <User></User>
             </RequireVerification>
+          </RequireAuth>
+        }></Route>
+        <Route path='/settings' element={
+          <RequireAuth>
+            <Settings></Settings>
           </RequireAuth>
         }></Route>
         <Route path='/admin' element={
