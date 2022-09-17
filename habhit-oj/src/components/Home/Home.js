@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom';
 import useFetch from '../hooks/useFetch/useFetch';
 
 const Home = () => {
-    const users = useFetch('http://localhost:5000/users');
-    const problems = useFetch('http://localhost:5000/problems');
+    const users = useFetch('https://habhit-oj-server.herokuapp.com/users');
+    users.sort((a, b) => {
+        return b.Solved.length - a.Solved.length;
+    })
+    const problems = useFetch('https://habhit-oj-server.herokuapp.com/problems');
     let usersLength = users.length;
     let problemsLength = problems.length;
     if (usersLength > 10) usersLength = 10;
@@ -25,16 +28,19 @@ const Home = () => {
             <div className='d-flex justify-content-around mt-4'>
                 <div>
                     <h4 className='fst-italic'>Users</h4>
+                    <hr />
                     {
                         users?.slice(0, usersLength)?.map(user => <li key={user._id}
                             style={{ textAlign: "left", margin: "6px 0" }}>
                             {/* <a href={url + prob._id} >{prob.problemName}</a> */}
                             <Link className="text-decoration-none" to={urlu + user._id}>{user.name}</Link>
+                            <span>{" [Solved " + user.Solved.total.length + "]"}</span>
                         </li>)
                     }
                 </div>
                 <div className='border-1'>
                     <h4 className='fst-italic'>Problems</h4>
+                    <hr />
                     {
                         problems?.slice(0, problemsLength)?.map(prob => <li key={prob._id}
                             style={{ textAlign: "left", margin: "6px 0" }}>

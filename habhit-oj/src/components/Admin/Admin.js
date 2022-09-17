@@ -36,7 +36,7 @@ const Admin = () => {
                 hidden
             };
 
-            fetch('http://localhost:5000/problems', {
+            fetch('https://habhit-oj-server.herokuapp.com/problems', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'

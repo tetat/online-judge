@@ -53,10 +53,13 @@ const Register = () => {
             email,
             address: "",
             institute: "",
-            Solved: [[""]]
+            Solved: {
+                total: [],
+                Submissions: []
+            }
         };
 
-        fetch(`http://localhost:5000/users`, {
+        fetch(`https://habhit-oj-server.herokuapp.com/users`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'

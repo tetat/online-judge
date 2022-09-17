@@ -16,6 +16,9 @@ const About = () => {
                         <a href='https://www.linkedin.com/in/tetat/' target='_blank'>Md. Nishat Miah</a>
                     </li>
                     <li>
+                        <a href='https://www.facebook.com/sabina.sultana.180625' target='_blank'>Sabina Sultana</a>
+                    </li>
+                    <li>
                         <a href='https://www.facebook.com/profile.php?id=100010289832358' target='_blank'>Sanjida Nahar Eva</a>
                     </li>
                     <li>

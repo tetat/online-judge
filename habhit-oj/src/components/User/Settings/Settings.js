@@ -6,7 +6,7 @@ import useFetch from '../../hooks/useFetch/useFetch';
 
 const Settings = () => {
     const [user] = useAuthState(auth);
-    const users = useFetch('http://localhost:5000/users');
+    const users = useFetch('https://habhit-oj-server.herokuapp.com/users');
 
     const [added, setAdded] = useState(false);
 
@@ -19,18 +19,19 @@ const Settings = () => {
 
         if (proceed) {
             const institute = event.target.institute.value;
-            const address = event.target.address.value;
+            const city = event.target.city.value;
+            const country = event.target.country.value;
 
             const User = users?.find(u => u.email === user.email);
 
-            fetch(`http://localhost:5000/users/${User._id}`, {
+            fetch(`https://habhit-oj-server.herokuapp.com/users/${User._id}`, {
                 method: 'PUT',
                 headers: {
                     'content-type': 'application/json'
                 },
                 body: JSON.stringify({
                     institute,
-                    address,
+                    address: city + ", " + country,
                     Solved: User.Solved
                 })
             })
@@ -64,12 +65,20 @@ const Settings = () => {
                         placeholder="Haji Abul Hossain Institute of Technology" required />
                 </div>
                 <div style={{ textAlign: "left" }}>
-                    <label className='fs-5' htmlFor='address'>Address</label>
+                    <label className='fs-5' htmlFor='city'>City Name</label>
                     <input
-                        id='address'
+                        id='city'
                         className='w-100 p-2 mb-4'
-                        type="text" name="address"
-                        placeholder="Tangail, Bangladesh" required />
+                        type="text" name="city"
+                        placeholder="Tangail" required />
+                </div>
+                <div style={{ textAlign: "left" }}>
+                    <label className='fs-5' htmlFor='country'>Country Name</label>
+                    <input
+                        id='country'
+                        className='w-100 p-2 mb-4'
+                        type="text" name="country"
+                        placeholder="Bangladesh" required />
                 </div>
 
                 <input

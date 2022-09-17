@@ -14,13 +14,13 @@ const Problem = () => {
     const [user] = useAuthState(auth);
     // console.log(user);
     const problemId = useParams().probId;
-    const url = `http://localhost:5000/problems/${problemId}`;
+    const url = `https://habhit-oj-server.herokuapp.com/problems/${problemId}`;
     const problem = SingleObject(url);
     // const Inputs = problem.sample.input;
     const Output = problem.hidden?.output;
 
     // get users
-    const users = useFetch('http://localhost:5000/users');
+    const users = useFetch('https://habhit-oj-server.herokuapp.com/users');
 
     const [code, setCode] = useState(``);
     const [lang, setLang] = useState('cpp');
@@ -43,7 +43,7 @@ const Problem = () => {
         }
 
         // document.getElementById('submitbtn').disabled = false;
-        Axios.post(`http://localhost:5000/compile`, {
+        Axios.post(`https://habhit-oj-server.herokuapp.com/compile`, {
             code: code,
             language: lang,
             input: problem.hidden?.input
@@ -56,12 +56,13 @@ const Problem = () => {
                     setOutput("Accepted");
                     setColor('text-success');
                     setSize('fs-5')
-                    saveTo();
+                    saveTo("Accepted", new Date());
                 }
                 else {
                     setOutput("Wrong Answer!");
                     setSize('fs-5')
                     setColor('text-danger');
+                    saveTo("Wrong Answer!", new Date());
                 }
             }
             else {
@@ -71,35 +72,54 @@ const Problem = () => {
                     setOutput(res.data.error);
                 }
                 setColor('text-danger');
+                saveTo("Run Time Error!", new Date());
             }
         }).then(() => {
             setLoading(false);
         })
 
-        const saveTo = () => {
+        const saveTo = (outp, curDate) => {
             // console.log(users);
             const User = users?.find(u => u.email === user.email);
             if (User) {
-                const newId = User.Solved?.find(d => d[0] === problemId);
+                const newId = User.Solved?.total.find(d => d === problemId);
                 // console.log(newId);
-                if (!newId) {
-                    User.Solved.push([problemId, problem.problemName]);
-                    // console.log(User);
-
-                    fetch(`http://localhost:5000/users/${User._id}`, {
-                        method: 'PUT',
-                        headers: {
-                            'content-type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            Solved: User.Solved
-                        })
-                    })
-                        .then(res => res.json())
-                        .then(data => {
-                            console.log(data);
-                        })
+                if (!newId && outp === "Accepted") {
+                    User.Solved.total.push(problemId);
                 }
+
+                console.log(curDate);
+                let dd = curDate.toLocaleString().split(' ');
+                dd[0] = dd[0].slice(0, dd[0].length - 1);
+                console.log(dd);
+                let color = "text-success";
+                if (outp !== "Accepted") {
+                    color = "text-danger";
+                }
+
+                const rec = {
+                    prob: problem.problemName,
+                    time: dd[0],
+                    lang,
+                    verdict: outp,
+                    color
+                }
+
+                User.Solved.Submissions.push(rec);
+
+                fetch(`https://habhit-oj-server.herokuapp.com/users/${User._id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        Solved: User.Solved
+                    })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+                    })
             }
         }
     }
