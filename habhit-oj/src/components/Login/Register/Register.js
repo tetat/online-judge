@@ -21,6 +21,7 @@ const Register = () => {
 
     let from = location.state?.from?.pathname || '/';
 
+    // if user exist
     if (user) {
         navigate(from, { replace: true });
     }
@@ -34,7 +35,7 @@ const Register = () => {
         const password = event.target.password.value;
         const confirmPassword = event.target.confirmPassword.value;
 
-        if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d#$@!%&*?]{8,30}$/.test(password) === false) {
+        if (password.length < 8) {
             setPass(true);
         }
         else if (password !== confirmPassword) {
@@ -42,37 +43,38 @@ const Register = () => {
         }
         else {
             createUserWithEmailAndPassword(email, password);
+
+            const user = {
+                name,
+                email,
+                address: "",
+                institute: "",
+                Solved: {
+                    total: [],
+                    Submissions: []
+                }
+            };
+
+            fetch(`https://habhit-oj-server.herokuapp.com/users`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            })
+                .then(res => res.json())
+                .then(data => console.log(data));
+
             setPassMatch(true);
             setPass(false);
             setTerms(!terms);
             event.target.reset();
         }
-
-        const user = {
-            name,
-            email,
-            address: "",
-            institute: "",
-            Solved: {
-                total: [],
-                Submissions: []
-            }
-        };
-
-        fetch(`https://habhit-oj-server.herokuapp.com/users`, {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        })
-            .then(res => res.json())
-            .then(data => console.log(data));
     }
 
     return (
         <div
-            style={{ width: "80%", margin: "0 auto", padding: "30px 0 110px 0", backgroundColor: "#f2f2f2" }}>
+            style={{ width: "80%", margin: "0 auto", padding: "30px 0 0 0", backgroundColor: "#f2f2f2", height: "550px" }}>
             <PageTitle title="Register"></PageTitle>
             <h4 className='fst-italic text-success'>Register in HABHIT OJ</h4>
             <form onSubmit={handleSubmit} className='w-25 mx-auto'>
@@ -111,7 +113,7 @@ const Register = () => {
                 {
                     pass && <>
                         <p>Password length must be at least 8</p>
-                        <p>Must be contain one lower case letter, one upper case letter and one digit</p>
+                        {/* <p>Must be contain one lower case letter, one upper case letter and one digit</p> */}
                     </>
                 }
 

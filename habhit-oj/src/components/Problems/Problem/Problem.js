@@ -15,6 +15,7 @@ const Problem = () => {
     // console.log(user);
     const problemId = useParams().probId;
     const url = `https://habhit-oj-server.herokuapp.com/problems/${problemId}`;
+    // get the problem that user wants
     const problem = SingleObject(url);
     // const Inputs = problem.sample.input;
     const Output = problem.hidden?.output;

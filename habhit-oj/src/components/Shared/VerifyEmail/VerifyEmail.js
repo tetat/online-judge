@@ -38,7 +38,7 @@ const VerifyEmail = () => {
                 </>
                     :
                     <>
-                        <p className='fs-4'>Verification link has been sent to your email. chack your inbox and if not found also check spam folder.</p>
+                        <p className='fs-4'>Verification link has been sent to your email. check your inbox and if not found also check spam folder.</p>
                         <button className='border-0 rounded px-3 py-1 text-white bg-primary'
                             onClick={async () => {
                                 await sendEmailVerification();

@@ -22,9 +22,6 @@ const About = () => {
                         <a href='https://www.facebook.com/profile.php?id=100010289832358' target='_blank'>Sanjida Nahar Eva</a>
                     </li>
                     <li>
-                        <a href='https://www.facebook.com/arrafihossain.refat.5' target='_blank'>Ar Rafi Hossain Refat</a>
-                    </li>
-                    <li>
                         <a href='https://www.facebook.com/AbdurRhaman28' target='_blank'>Abdur Rahman</a>
                     </li>
                 </ul>

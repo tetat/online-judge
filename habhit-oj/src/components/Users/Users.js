@@ -4,8 +4,9 @@ import useFetch from '../hooks/useFetch/useFetch';
 
 const Users = () => {
     const users = useFetch('https://habhit-oj-server.herokuapp.com/users');
+    // sort users decrease order by total problem solved 
     users.sort((a, b) => {
-        return b.Solved.length - a.Solved.length;
+        return b.Solved.total.length - a.Solved.total.length;
     })
     const url = '/user/';
 

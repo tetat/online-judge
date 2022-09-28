@@ -10,6 +10,7 @@ const Admin = () => {
 
         if (proceed) {
             event.preventDefault();
+            // problem body
             const problemName = event.target.probName.value;
             const time = "1s";
             const memory = "512mb";
@@ -35,7 +36,7 @@ const Admin = () => {
                 sample,
                 hidden
             };
-
+            // save new problem in database
             fetch('https://habhit-oj-server.herokuapp.com/problems', {
                 method: 'POST',
                 headers: {

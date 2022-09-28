@@ -10,10 +10,6 @@ const Header = () => {
 
     const [user, loading, error] = useAuthState(auth);
 
-    // const [U, id] = [{}, ""];
-    // if (user) {
-    //     [U, id] = GetUser(user.email);
-    // }
 
     const handleLogOut = () => {
         signOut(auth);

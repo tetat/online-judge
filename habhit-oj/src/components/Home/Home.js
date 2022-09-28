@@ -3,13 +3,17 @@ import { Link } from 'react-router-dom';
 import useFetch from '../hooks/useFetch/useFetch';
 
 const Home = () => {
+    // get all users
     const users = useFetch('https://habhit-oj-server.herokuapp.com/users');
+    // sort decrease user by number of problems solved by users
     users.sort((a, b) => {
-        return b.Solved.length - a.Solved.length;
+        return b.Solved.total.length - a.Solved.total.length;
     })
+    // get all problems
     const problems = useFetch('https://habhit-oj-server.herokuapp.com/problems');
     let usersLength = users.length;
     let problemsLength = problems.length;
+    // show only 10 users and 10 problems in home page
     if (usersLength > 10) usersLength = 10;
     if (problemsLength > 10) problemsLength = 10;
 
@@ -17,7 +21,7 @@ const Home = () => {
     const urlp = '/problems/';
 
     return (
-        <div style={{ width: "80%", margin: "0 auto", padding: "20px 20px 220px 20px", backgroundColor: "#f2f2f2" }}>
+        <div style={{ width: "80%", margin: "0 auto", padding: "20px 20px 0 20px", backgroundColor: "#f2f2f2", height: "600px" }}>
             <div>
                 <h3>Welcome to <span className='fst-italic' style={{ color: "#191970" }}>HABHIT Online Judge</span></h3>
                 <p>Learn with us and become <span className='fst-italic'>Great!</span></p>

@@ -5,14 +5,17 @@ import pp from '../../Images/blank.jpg';
 import PageTitle from '../hooks/PageTitle/PageTitle';
 
 const User = () => {
+    // current probmem's id
     const userId = useParams().userId;
     const url = `https://habhit-oj-server.herokuapp.com/users/${userId}`;
+    // get current user
     const user = SingleObject(url);
 
     // console.log(user);
 
     let sub = user?.Solved?.Submissions;
     let subr = [];
+    // reverse submissions
     for (let i = sub?.length - 1; i >= 0; i--) {
         subr.push(sub[i]);
     }

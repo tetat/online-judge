@@ -16,6 +16,7 @@ const Login = () => {
     const location = useLocation();
     let from = location.state?.from?.pathname || "/";
 
+    // if user exist, don't need to login or register
     if (user) {
         console.log(user);
         navigate(from, { replace: true });
@@ -32,7 +33,7 @@ const Login = () => {
 
     return (
         <div
-            style={{ width: "80%", margin: "0 auto", padding: "30px 0 110px 0", backgroundColor: "#f2f2f2" }}>
+            style={{ width: "80%", margin: "0 auto", padding: "30px 0 0 0", backgroundColor: "#f2f2f2", height: "550px" }}>
             <PageTitle title="Login"></PageTitle>
             <h4 className='fst-italic text-success'>Login to HABHIT OJ</h4>
             <form onSubmit={handleLogIn} className='w-25 mx-auto'>

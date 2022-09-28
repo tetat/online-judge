@@ -3,6 +3,7 @@ import PageTitle from '../hooks/PageTitle/PageTitle';
 import useFetch from '../hooks/useFetch/useFetch';
 
 const Problems = () => {
+    // get all problems
     const problems = useFetch('https://habhit-oj-server.herokuapp.com/problems');
     // problems.sort(function (a, b) {
     //     return a._id - b._id;
