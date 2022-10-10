@@ -164,21 +164,28 @@ const Problem = () => {
                     <p className='mt-3 mb-0 fw-bold fst-italic'>Editor</p>
                     <textarea className='w-75' rows="15"
                         value={code} onChange={(e) => setCode(e.target.value)}></textarea>
+                    {
+                        user ? <>
+                            <div className='my-4'>
+                                <span className='border-0 rounded me-3 p-2 text-white bg-primary'>Select a language &nbsp;
+                                    <select className='border-0 px-2 rounded me-3'
+                                        value={lang} onChange={(e) => setLang(e.target.value)}>
+                                        <option value='cpp'>C++</option>
+                                        <option value='c'>C</option>
+                                        <option value='java'>Java</option>
+                                        <option value='py'>Python</option>
+                                    </select>
+                                </span>
+                                <button
+                                    className='border-0 px-3 py-1 rounded text-white bg-primary'
+                                    onClick={handleSubmit} >Submit</button>
+                            </div>
+                        </> :
+                            <>
+                                <p className='text-danger bold my-4'>Login or create account for submission!</p>
+                            </>
+                    }
 
-                    <div className='my-4'>
-                        <span className='border-0 rounded me-3 p-2 text-white bg-primary'>Select a language &nbsp;
-                            <select className='border-0 px-2 rounded me-3'
-                                value={lang} onChange={(e) => setLang(e.target.value)}>
-                                <option value='cpp'>C++</option>
-                                <option value='c'>C</option>
-                                <option value='java'>Java</option>
-                                <option value='py'>Python</option>
-                            </select>
-                        </span>
-                        <button
-                            className='border-0 px-3 py-1 rounded text-white bg-primary'
-                            onClick={handleSubmit} >Submit</button>
-                    </div>
                 </div>
                 <div className='bg-white m-3 p-5'>
                     {

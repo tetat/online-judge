@@ -3,15 +3,19 @@ import { Link, useParams } from 'react-router-dom';
 import SingleObject from '../hooks/SingleObject/SingleObject';
 import pp from '../../Images/blank.jpg';
 import PageTitle from '../hooks/PageTitle/PageTitle';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import auth from '../../firebase.init';
 
 const User = () => {
+    const [curUser] = useAuthState(auth);
+    // console.log(curUser.email);
     // current probmem's id
     const userId = useParams().userId;
     const url = `https://habhit-oj-server.herokuapp.com/users/${userId}`;
     // get current user
     const user = SingleObject(url);
 
-    // console.log(user);
+    // console.log(user.email);
 
     let sub = user?.Solved?.Submissions;
     let subr = [];
@@ -27,15 +31,17 @@ const User = () => {
     if (Address === '') Address = 'None';
 
     return (
-        <div style={{ width: "80%", margin: "0 auto", padding: "0 20px 0 20px", backgroundColor: "#f2f2f2" }}>
+        <div style={{ width: "80%", margin: "0 auto", padding: "10px 20px 0 20px", backgroundColor: "#f2f2f2" }}>
             <PageTitle title={`${user.name}`}></PageTitle>
-            <div
-                className='mt-0 mb-4'
-                style={{ textAlign: "right" }}>
-                <Link
-                    className='text-decoration-none text-primary mt-0'
-                    to='/settings'>Update</Link>
-            </div>
+            {
+                curUser?.email === user?.email && <div
+                    className='mt-0 mb-4'
+                    style={{ textAlign: "right" }}>
+                    <Link
+                        className='text-decoration-none text-primary mt-0'
+                        to='/settings'>Update</Link>
+                </div>
+            }
 
             <div className='w-75 mx-auto border-1'>
 
