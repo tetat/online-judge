@@ -34,7 +34,7 @@ const User = () => {
         <div style={{ width: "80%", margin: "0 auto", padding: "10px 20px 0 20px", backgroundColor: "#f2f2f2" }}>
             <PageTitle title={`${user.name}`}></PageTitle>
             {
-                curUser?.email === user?.email && <div
+                curUser && curUser?.email === user?.email && <div
                     className='mt-0 mb-4'
                     style={{ textAlign: "right" }}>
                     <Link
